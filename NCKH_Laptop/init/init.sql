@@ -1,0 +1,19 @@
+﻿CREATE DATABASE SampleDB;
+GO
+
+USE SampleDB;
+GO
+
+CREATE TABLE Products (
+    Id INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    Price DECIMAL(10, 2)
+);
+GO
+
+INSERT INTO Products (Name, Price)
+VALUES 
+('Bàn', 1000000),
+('Ghế', 500000),
+('Tủ', 1500000);
+GO

@@ -1,0 +1,42 @@
+﻿# services:
+#   nckh_laptop:
+#     image: ${DOCKER_REGISTRY-}nckhlaptop
+#     build:
+#       context: .
+#       dockerfile: NCKH_Laptop\Dockerfile
+#       version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: my_sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+      - ./init:/init   # Mount thư mục init chứa file SQL
+    command: >
+      /bin/bash -c "
+      /opt/mssql/bin/sqlservr & 
+      sleep 20 && 
+      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'YourStrong!Passw0rd' -i /init/init.sql &&
+      tail -f /dev/null"
+
+  blazor:
+    build:
+      context: ./BlazorApp
+    container_name: my_blazor_app
+    ports:
+      - "8080:80"
+    depends_on:
+      - sqlserver
+    environment:
+      ConnectionStrings__Default: "Server=sqlserver;Database=SampleDB;User Id=sa;Password=YourStrong!Passw0rd;"
+    networks:
+      - default
+
+volumes:
+  sqlvolume:

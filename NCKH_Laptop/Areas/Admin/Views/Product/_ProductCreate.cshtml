@@ -1,0 +1,55 @@
+﻿@model NCKH_Laptop.Areas.Admin.Models.ProductModel
+
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm Sản Phẩm</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form  id="createFormProduct" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="TenSanPham" class="control-label">Tên Sản Phẩm</label>
+            <input asp-for="TenSanPham" name="TenSanPham" id="TenSanPham" class="form-control" />
+            <span asp-validation-for="TenSanPham" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="HangId" class="control-label">Hãng Sản Phẩm</label>
+            <select asp-for="HangId" asp-items="ViewBag.hangProductList" id="HangId" class="form-control">
+                <option value="">Chọn hãng sản phẩm</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LoaiId" class="control-label">Loại Sản Phẩm</label>
+            <select asp-for="LoaiId" asp-items="ViewBag.loaiProductList" id="LoaiId" class="form-control">
+                <option value="">Chọn loại sản phẩm</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Gia" class="control-label">Giá Sản Phẩm</label>
+            <input asp-for="Gia" type="text" id="Gia" class="form-control" oninput="formatCurrency(this)" onkeypress="return isNumberKey(event)" />
+            <span asp-validation-for="Gia" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PhanTramGiam" class="control-label">Giá Giảm</label>
+            <input asp-for="PhanTramGiam" type="text" id="PhanTramGiam" class="form-control" oninput="formatCurrency(this)" onkeypress="return isNumberKey(event)" />
+            <span asp-validation-for="PhanTramGiam" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Image" class="control-label">Ảnh Sản Phẩm</label>
+            <input type="file" name="imageFile" id="Image" class="form-control" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ThongTinSanPham" class="control-label">Thông Tin Sản Phẩm</label>
+            <input asp-for="ThongTinSanPham" id="ThongTinSanPham" class="form-control" />
+            <span asp-validation-for="ThongTinSanPham" class="text-danger"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" onclick="validateAndSubmitProduct()" class="btn btn-primary">Lưu Thông Tin</button>
+        </div>
+    </form>
+
+</div>

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebsiteBanHang.Areas.Admin.AdminDTO;
+using NCKH_Laptop.Areas.Admin.AdminDTO;
 
 namespace NCKH_Laptop.Areas.Admin.Models
 {

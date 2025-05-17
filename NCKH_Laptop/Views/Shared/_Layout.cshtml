@@ -1,49 +1,380 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NCKH_Laptop</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/NCKH_Laptop.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NCKH_Laptop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject LanguageService language
 
-    <footer class="border-top footer text-muted">
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Trang chủ</title>
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon">
+   <!-- Bootstrap v5.0.1 -->
+    <link href="~/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="~/css/hover.css" type="text/css" rel="stylesheet">
+    <link href="~/css/home.css" type="text/css" rel="stylesheet">
+    <link href="~/css/reponsive.css" type="text/css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="~/js/bootstrap.bundle.js" type="text/javascript"></script>
+
+    <!-- Bootstrap Icons v1.5.0 -->
+    <link href="~/css/bootstrap-icons.css" type="text/css" rel="stylesheet">
+    <!-- Include SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.9.0/sweetalert2.min.js" integrity="sha512-GAaXlfJeIbLNG2LQu2v4pf8YEc7iPz+GE3LZyUmdR7d7Id5JsER9vmJVxMKw1MqmdlVh3NXxTxQVd9AS53G+4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Custom Styles -->
+    <link href="~/css/styles.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="section-header">
+        <section class="header-main border-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 py-3 hvr-shrink">
+                        <a class="text-body" asp-controller="Home" asp-action="Index">
+                            <h3 class="text-primary fw-bold text-uppercase"> vifiretek <span class="fs-3 text-danger">.VN</span> </h3>
+                        </a>
+                    </div> <!-- col.// -->
+                    <div class="col-lg-4 col-xl-5">
+                        <form asp-controller="Home" asp-action="Index">
+                            <div class="input-group w-100">
+                                <input type="text" class="form-control" placeholder="Nhập từ khóa cần tìm ..." name="searchName" id="searchName" value="@ViewBag.SearchName">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div> <!-- col.// -->
+                    <div class="col-lg-5 col-xl-4">
+                        <ul class="nav col-12 col-lg-auto my-2 my-lg-0 justify-content-center justify-content-lg-end text-small">
+                            <li>
+                                <a href="#" class="nav-link text-body">
+                                    <i class="bi bi-person d-block text-center fs-3"></i>
+                                    @language.GetKey("Accout")
+
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link text-body">
+                                    <i class="bi bi-list-check d-block text-center fs-3"></i>
+                                    @language.GetKey("Bill")
+
+
+
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Cart" asp-action="Index" class="nav-link text-body position-relative">
+                                    <i class="bi bi-cart d-block text-center fs-3" style="margin-right:auto;"></i>
+                                    @language.GetKey("Cart")
+                                    <span class="position-absolute top-0  badge rounded-pill bg-danger" style="    margin-left: -10px;" id="cartItemCount">0</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div> <!-- col.// -->
+                </div> <!-- row.// -->
+            </div> <!-- container.// -->
+        </section> <!-- header-main.// -->
+    </header> <!-- section-header.// -->
+
+    <nav class="navbar navbar-main navbar-expand-lg navbar-light border-bottom">
         <div class="container">
-            &copy; 2023 - NCKH_Laptop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong><i class="bi bi-list"></i> Danh mục sản phẩm</strong>
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="categoryDropdown">
+                            <li><a class="dropdown-item" href="#">Tất cả danh mục</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-item nav-link me-2"><i class="bi bi-laptop"></i> LAPTOP MỚI</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-item nav-link me-2"><i class="bi bi-fire"></i> KHUYẾN MÃI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-item nav-link me-2"><i class="bi bi-cash-coin"></i> TRẢ GÓP</a>
+                    </li>
+                </ul>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="nav-link text-dark" title="Manage">Hello @User.Identity?.Name!</a>
+
+                    <!-- Hiển thị nút đăng xuất -->
+                    <a class="btn btn-danger" role="button">
+                        <i class="fa-solid fa-left-long"></i>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                        </form>
+                    </a>
+                }
+                else
+                {
+                    <!-- Hiển thị nút đăng ký và đăng nhập -->
+                    <a class=" me-2 text-white" asp-area="Identity" asp-page="/Account/Register" role="button"> <i class="fa-solid fa-user-plus"></i> Đăng ký</a>
+                    <a class=" me-2 text-white" asp-area="Identity" asp-page="/Account/Login" role="button" style="margin-left:15px"><i class="fa-solid fa-right-to-bracket"></i>  Đăng nhập</a>
+                }
+
+            </div>
+        </div> <!-- container.// -->
+    </nav> <!-- navbar-main.// -->
+
+
+    <section class="section-content mb-2">
+
+        @RenderBody()
+
+    </section>
+
+    <footer class="mt-5">
+        <div class="tintuc-footer hide-mobile hide-tablet">
+            <div class="container">
+                <div class="main-title">
+                    <p>TIN TỨC CÔNG NGHỆ MỚI</p>
+                </div>
+                <!-- end_main_title -->
+                <div class="list-tintuc">
+                    <div class="row">
+                        <!-- Add Razor logic for dynamic content here if needed -->
+                        <div class="item-tintuc col-xl-3 col-md-6 hvr-grow-shadow">
+                            <a href="">
+                                <img class="" src="~/img/footer-tintuc-1.jpg" alt="">
+                            </a>
+                            <!-- Add dynamic content here if needed -->
+                            <div class="media-body">
+                                <div class="info-tintuc">
+                                    <span class="date-create">
+                                        26-06-2023, 4:42 pm
+                                    </span>
+                                </div>
+                                <!-- end_info_tintuc -->
+                                <div class="title-tintuc">
+                                    <a href="#">TOP 5 Laptop Gaming 20-25 Triệu Bán Chạy Nhất 2023</a>
+                                </div>
+                                <!-- end_title_tintuc -->
+                            </div>
+                        </div>
+                        <div class="item-tintuc col-xl-3 col-md-6 hvr-grow-shadow">
+                            <a href="">
+                                <img class="" src="/img/footer-tintuc-2.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <div class="info-tintuc">
+                                    <span class="date-create">
+                                        26-06-2023, 4:42 pm
+                                    </span>
+                                </div>
+                                <!-- end_info_tintuc -->
+                                <div class="title-tintuc">
+                                    <a href="">TOP 3 Laptop Gaming Intel Đáng Mua Nhất 2023</a>
+                                </div>
+                                <!-- end_title_tintuc -->
+                            </div>
+                        </div>
+                        <!-- end_col_lg_3 -->
+                        <div class="item-tintuc col-xl-3 col-md-6 hvr-grow-shadow">
+                            <a href="">
+                                <img class="" src="/img/footer-tintuc-3.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <div class="info-tintuc">
+                                    <span class="date-create">
+                                        26-06-2023, 4:42 pm
+                                    </span>
+                                </div>
+                                <!-- end_info_tintuc -->
+                                <div class="title-tintuc">
+                                    <a href="">
+                                        Lenovo ra mắt Legion R9000P 2023 sở hữu Chip Ryzen mới, GPU RTX 4060 với
+                                        hiệu năng khủng
+                                    </a>
+                                </div>
+                                <!-- end_title_tintuc -->
+                            </div>
+                        </div>
+                        <!-- end_col_lg_3 -->
+                        <div class="item-tintuc col-xl-3 col-md-6 hvr-grow-shadow">
+                            <a href="">
+                                <img class="" src="/img/footer-tintuc-4.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <div class="info-tintuc">
+                                    <span class="date-create">
+                                        26-06-2023, 4:42 pm
+                                    </span>
+                                </div>
+                                <!-- end_info_tintuc -->
+                                <div class="title-tintuc">
+                                    <a href="">ASUS ra mắt màn hình gaming tần số quét cao, độ phân giải 5K</a>
+                                </div>
+                                <!-- end_title_tintuc -->
+                            </div>
+                        </div>
+                        <!-- Add more items with dynamic content here -->
+                    </div>
+                </div>
+                <!-- end_list_tintuc -->
+            </div>
+        </div>
+        <div class="footer-link">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <ul class="list-unstyled">
+                            <h6>
+                                <b>
+                                    CÔNG TY TNHH TIN HỌC CÔNG NGHỆ AZ VIỆT NAM
+                                </b>
+                            </h6>
+                            <li>Địa chỉ: Số 18, ngõ 121, Thái Hà, Đống Đa, Hà Nội</li>
+                            <li>Hotline: 0825 233 233</li>
+                            <li>Email: hotrolaptopaz@gmail.com</li>
+                            <li class="share mt-2">
+                                <a href="https://www.facebook.com/laptopaz.vn" target="_blank"><i class="bi bi-facebook"></i></a>
+                                <a href="https://www.youtube.com/c/LAPTOPAZREVIEW" target="_blank"><i class="bi bi-youtube"></i></a>
+                                <a href="https://www.tiktok.com/laptopaz" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <ul class="list-unstyled">
+                            <h6>
+                                <b>
+                                    THÔNG TIN CÔNG TY
+                                </b>
+                            </h6>
+                            <li>Giới thiệu công ty</li>
+                            <li>Tuyển dụng</li>
+                            <li>Gửi góp ý, khiếu nại</li>
+                            <li class="baohanh-item mt-3">
+                                <a href="http://www.online.gov.vn/Home/WebDetails/76577?AspxAutoDetectCookieSupport=1" class="thongbaobct">
+                                    <img src="~/img/footer-icon.png">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <ul class="list-unstyled">
+                            <h6>
+                                <b>
+                                    CHÍNH SÁCH CÔNG TY
+                                </b>
+                            </h6>
+                            <li>Chính sách chất lượng</li>
+                            <li>Chính sách bảo hành</li>
+                            <li>Chính sách đổi trả </li>
+                            <li>Chính sách bảo mật thông tin</li>
+                            <li>Chính sách vận chuyển</li>
+                            <li>Hướng dẫn mua hàng- thanh toán</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <ul class="list-unstyled">
+                            <h6>
+                                <b>
+                                    HỆ THỐNG CỬA HÀNG LAPTOPAZ
+                                </b>
+                            </h6>
+                            <li>Số 18, ngõ 121, Thái Hà, Đống Đa, Hà Nội</li>
+                            <li>Bán hàng: Từ 8h30 - 21h30</li>
+                            <li>Kỹ thuật: Từ 8h30 - 12h & 13h30 - 17h30</li>
+                            <li class="mt-3">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="~/img/featured/world.png" width="32px" height="32px" />        Ngôn Ngữ
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="changeLanguage" asp-route-language="vi-VN"> <img src="~/img/featured/vietnam.png" /> Việt Nam</a>
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="changeLanguage" asp-route-language="en-US"><img src="~/img/featured/united-kingdom.png" />Tiếng Anh</a>
+                                        </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end_row -->
+                <div class="h_line"></div>
+            </div>
+
+        </div>
+        <!-- end_footer_link -->
+        <div class="footer-bottom">
+            <p>
+                Công ty TNHH Tin học Công nghệ AZ Việt Nam. MST số 0108956087 cấp ngày 23/10/2019  Laptopaz. All Rights
+                Reserved
+            </p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <a href="#" id="back-to-top" title="Back to top"> <i class="fa-sharp fa-solid fa-circle-up"></i> </a>
+    <style>
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            cursor: pointer;
+            font-size: xx-large;
+        }
+
+            #back-to-top.show {
+                display: block;
+            }
+    </style>
+
+    <script>
+        var backToTop = document.querySelector('#back-to-top');
+
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 100) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+    <!-- Sử dụng CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Bao gồm SweetAlert2 từ CDN -->
+    <script src="~/js/Cart.js"></script>
+
+
 </body>
+
 </html>

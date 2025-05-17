@@ -1,0 +1,19 @@
+﻿@model NCKH_Laptop.Areas.Admin.Models.CategoryModel
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm loại sản phẩm</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form  id="createFormCategory">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="TenLoai">Tên Loại Sản Phẩm</label>
+            <input type="text" class="form-control mb-3" asp-for="TenLoai" id="TenLoai" name="TenLoai" oninvalid="setCustomValidity('Bạn phải nhập đầy đủ thông tin.')" oninput="setCustomValidity('')" required>
+            <span asp-validation-for="TenLoai" class="text-danger"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary" onclick="validateAndSubmitCategory()">Lưu Thông Tin</button>
+        </div>
+    </form>
+</div>

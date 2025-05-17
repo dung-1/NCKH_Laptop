@@ -1,0 +1,123 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+
+@inject IViewLocalizer Localizer
+@model NCKH_Laptop.Areas.Admin.AdminDTO.StatisticsViewDto
+@{
+    ViewData["Title"] = "Monthly Revenue Chart";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    <i class="mdi mdi-home"></i>
+                </span> @Localizer[" Dashboard"]
+            </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group">
+                </div>
+            <div class="col-md-4 form-group">
+                <label for="selectedYear" class="fs-6 text-capitalize">Chọn Năm:</label>
+                <select class="form-control" id="selectedYear" name="selectedYear" onchange="updateChart()">
+                    @foreach (var year in ViewBag.AvailableYears)
+                    {
+                        <option value="@year" selected="@(ViewData["SelectedYear"] != null && (int)ViewData["SelectedYear"] == year)">@year</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-danger card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="../../LayoutAdmin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Doanh Thu <i class="mdi mdi-chart-line mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">@string.Format(new CultureInfo("vi-VN", false), "{0:c0}", @Model.TotalRevenue)</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-info card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="../../LayoutAdmin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Tổng Hóa Đơn <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">@Model.TotalOrdersCount</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin">
+                <div class="card bg-gradient-success card-img-holder text-white">
+                    <div class="card-body">
+                        <img src="../../LayoutAdmin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                        <h4 class="font-weight-normal mb-3">
+                            Số Sản Phẩm Bán Ra <i class="mdi mdi-diamond mdi-24px float-right"></i>
+                        </h4>
+                        <h2 class="mb-5">@Model.TotalProductsSold</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="monthlyRevenueChart" style="height:250px"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+                <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+                <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+            </div>
+        </footer>
+    </div>
+    @section scripts {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            function updateChart() {
+                var selectedYear = document.getElementById('selectedYear').value;
+                window.location.href = "/admin/homeadmin?selectedYear=" + selectedYear;
+            }
+
+            var labels = @Html.Raw(Json.Serialize(ViewBag.Labels));
+            var data = @Html.Raw(Json.Serialize(ViewBag.Data));
+
+            var ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu tháng',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    }
+</div>

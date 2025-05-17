@@ -1,0 +1,25 @@
+﻿@model NCKH_Laptop.Areas.Admin.Models.CategoryModel
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="exampleModalLabel">Sửa loại sản phẩm</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form id="EditFormCategory">
+        <input type="hidden" class="form-control mb-3" id="Id" asp-for="Id">
+
+        <div class="mb-3">
+            <label asp-for="MaLoai">Mã Loại Sản Phẩm</label>
+            <input type="text" class="form-control id=" id=" MaLoai" mb-3" asp-for="MaLoai" readonly>
+            <span asp-validation-for="MaLoai" class=" alert-danger"></span>
+            </div>
+        <div class="mb-3">
+                <label asp-for="TenLoai">Tên Loại Sản Phẩm</label>
+            <input type="text" class="form-control mb-3" id="TenLoai" asp-for="TenLoai">
+                <span asp-validation-for="TenLoai" class=" alert-danger"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary" onclick="validateEditCategory()">Sửa Thông Tin</button>
+        </div>
+    </form>
+</div>

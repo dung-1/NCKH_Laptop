@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Reflection;
 using NCKH_Laptop.Data;
@@ -15,12 +14,6 @@ namespace NCKH_Laptop
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
 
-            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-            });
-
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -32,7 +25,7 @@ namespace NCKH_Laptop
 
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
@@ -47,14 +40,6 @@ namespace NCKH_Laptop
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
 
             });
-
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.Name = "DungCTS";
-                    options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                });
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
@@ -84,13 +69,24 @@ namespace NCKH_Laptop
                 var questStringCultureProvider = options.RequestCultureProviders[0];
                 options.RequestCultureProviders.RemoveAt(0);
                 options.RequestCultureProviders.Insert(1, questStringCultureProvider);
-                //Add services to the container.
+            });
+            builder.Configuration.AddUserSecrets<Program>();
+
+            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
             });
             var app = builder.Build();
 
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseRequestLocalization();
@@ -101,8 +97,10 @@ namespace NCKH_Laptop
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+          app.UseEndpoints(endpoints =>
             {
+
+                // Cuối cùng, đặt route mặc định cho Home controller
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"
@@ -110,7 +108,6 @@ namespace NCKH_Laptop
 
             });
             app.MapRazorPages();
-
             app.Run();
         }
     }
